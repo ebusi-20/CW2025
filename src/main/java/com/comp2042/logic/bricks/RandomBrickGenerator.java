@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class RandomBrickGenerator implements BrickGenerator {
 
@@ -21,20 +22,32 @@ public class RandomBrickGenerator implements BrickGenerator {
         brickList.add(new SBrick());
         brickList.add(new TBrick());
         brickList.add(new ZBrick());
-        nextBricks.add(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
-        nextBricks.add(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
+        ensureNextBricks(3);
     }
 
     @Override
     public Brick getBrick() {
-        if (nextBricks.size() <= 1) {
-            nextBricks.add(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
-        }
-        return nextBricks.poll();
+        ensureNextBricks(3);
+        Brick next = nextBricks.pollFirst();
+        ensureNextBricks(3);
+        return next;
     }
 
     @Override
     public Brick getNextBrick() {
-        return nextBricks.peek();
+        ensureNextBricks(1);
+        return nextBricks.peekFirst();
+    }
+
+    @Override
+    public List<Brick> peekNextBricks(int count) {
+        ensureNextBricks(count);
+        return nextBricks.stream().limit(count).collect(Collectors.toList());
+    }
+
+    private void ensureNextBricks(int count) {
+        while (nextBricks.size() < count) {
+            nextBricks.addLast(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
+        }
     }
 }

@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.Screen;
+import javafx.geometry.Rectangle2D;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,10 +22,22 @@ public class Main extends Application {
         Parent root = fxmlLoader.load();
         GuiController c = fxmlLoader.getController();
 
-        primaryStage.setTitle("TetrisJFX");
-        Scene scene = new Scene(root, 300, 510);
+        primaryStage.setTitle("俄罗斯方块");
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+        Scene scene = new Scene(root, bounds.getWidth(), bounds.getHeight());
         primaryStage.setScene(scene);
+        primaryStage.setX(bounds.getMinX());
+        primaryStage.setY(bounds.getMinY());
+        primaryStage.setWidth(bounds.getWidth());
+        primaryStage.setHeight(bounds.getHeight());
+        primaryStage.setMaximized(true);
         primaryStage.show();
+        
+        // Setup video background after scene is shown
+        c.setupVideoBackgroundAfterSceneReady(scene);
+        // Setup background music after scene is shown
+        c.setupBackgroundMusicAfterSceneReady(scene);
+        
         new GameController(c);
     }
 

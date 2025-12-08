@@ -1,17 +1,29 @@
 package com.comp2042;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class ViewData {
 
     private final int[][] brickData;
     private final int xPosition;
     private final int yPosition;
-    private final int[][] nextBrickData;
+    private final List<int[][]> nextBricksData;
+    private final List<Integer> nextBricksTextureTypes;
+    private final int ghostXPosition;
+    private final int ghostYPosition;
+    private final int textureType; // 0=wood, 1=stone, 2=mixed
 
-    public ViewData(int[][] brickData, int xPosition, int yPosition, int[][] nextBrickData) {
+    public ViewData(int[][] brickData, int xPosition, int yPosition, List<int[][]> nextBricksData,
+                    List<Integer> nextBricksTextureTypes, int ghostXPosition, int ghostYPosition, int textureType) {
         this.brickData = brickData;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
-        this.nextBrickData = nextBrickData;
+        this.nextBricksData = nextBricksData == null ? List.of() : MatrixOperations.deepCopyList(nextBricksData);
+        this.nextBricksTextureTypes = nextBricksTextureTypes == null ? List.of() : new ArrayList<>(nextBricksTextureTypes);
+        this.ghostXPosition = ghostXPosition;
+        this.ghostYPosition = ghostYPosition;
+        this.textureType = textureType;
     }
 
     public int[][] getBrickData() {
@@ -26,7 +38,23 @@ public final class ViewData {
         return yPosition;
     }
 
-    public int[][] getNextBrickData() {
-        return MatrixOperations.copy(nextBrickData);
+    public List<int[][]> getNextBricksData() {
+        return MatrixOperations.deepCopyList(nextBricksData);
+    }
+
+    public List<Integer> getNextBricksTextureTypes() {
+        return new ArrayList<>(nextBricksTextureTypes);
+    }
+
+    public int getGhostXPosition() {
+        return ghostXPosition;
+    }
+
+    public int getGhostYPosition() {
+        return ghostYPosition;
+    }
+
+    public int getTextureType() {
+        return textureType;
     }
 }
