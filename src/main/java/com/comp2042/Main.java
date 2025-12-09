@@ -22,7 +22,7 @@ public class Main extends Application {
         Parent root = fxmlLoader.load();
         GuiController c = fxmlLoader.getController();
 
-        primaryStage.setTitle("俄罗斯方块");
+        primaryStage.setTitle("TetrisJFX");
         Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
         Scene scene = new Scene(root, bounds.getWidth(), bounds.getHeight());
         primaryStage.setScene(scene);
